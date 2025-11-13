@@ -57,6 +57,17 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/myServices", async (req, res) => {
+      const email = req.query.email;
+      const query = {};
+      if (email) {
+        query.Email = email;
+      }
+      const cursor = serviceCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // post API;
     app.post("/add-service", async (req, res) => {
       const service = req.body;
