@@ -51,6 +51,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/all-services", async (req, res) => {
+      const cursor = serviceCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // send a ping to successful connection;
     await client.db("admin").command({ ping: 1 });
     console.log(
