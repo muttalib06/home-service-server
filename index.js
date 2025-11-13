@@ -76,12 +76,24 @@ async function run() {
     });
 
     // Delete API;
-    app.delete("/myServices/:id",async(req,res) => {
+    app.delete("/myServices/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id:new ObjectId(id)};
+      const query = { _id: new ObjectId(id) };
       const result = await serviceCollection.deleteOne(query);
-      res.send(result)
-    })
+      res.send(result);
+    });
+
+    // update Api;
+    app.patch("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const updateData = req.body;
+      const updateDoc = {
+        $set: updateData,
+      };
+      const result = await serviceCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
 
     // send a ping to successful connection;
     await client.db("admin").command({ ping: 1 });
