@@ -87,6 +87,23 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/filter-services", async (req, res) => {
+      const { min, max } = req.query;
+      let query = {};
+      if (min || max) {
+        query.Price = {};
+        if (min) {
+          query.Price.$gte = parseInt(min);
+        }
+        if (max) {
+          query.Price.$lte = parseInt(max);
+        }
+      }
+      const cursor = serviceCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // post API;
     app.post("/add-service", async (req, res) => {
       const service = req.body;
@@ -111,7 +128,7 @@ async function run() {
     app.delete("/bookings/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result =await bookingCollection.deleteOne(query);
+      const result = await bookingCollection.deleteOne(query);
       res.send(result);
     });
 
